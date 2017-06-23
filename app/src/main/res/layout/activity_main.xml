@@ -36,6 +36,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <Button
+        android:id="@+id/next_act"
+        android:text="next"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 
 
 </LinearLayout>

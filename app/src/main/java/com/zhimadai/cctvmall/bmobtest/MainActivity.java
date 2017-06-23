@@ -10,12 +10,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.zhimadai.cctvmall.bmobtest.entity.GameScore;
 import com.zhimadai.cctvmall.bmobtest.permission.PermissionListener;
 import com.zhimadai.cctvmall.bmobtest.permission.PermissionManager;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 import cn.bmob.v3.exception.BmobException;
@@ -24,11 +29,22 @@ import cn.bmob.v3.listener.SaveListener;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CAMERA = 0x00;
+    @BindView(R.id.add_btn)
+    Button addBtn;
+    @BindView(R.id.del_btn)
+    Button delBtn;
+    @BindView(R.id.update_btn)
+    Button updateBtn;
+    @BindView(R.id.qurey_btn)
+    Button qureyBtn;
+    @BindView(R.id.next_act)
+    Button nextAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         //第一：默认初始化
         Bmob.initialize(this, "59af671bb1ca249b015dbebf558712f2");
@@ -36,29 +52,21 @@ public class MainActivity extends AppCompatActivity {
         //Bmob.initialize(this, "Your Application ID","bmob");
 
         //第二：自v3.4.7版本开始,设置BmobConfig,允许设置请求超时时间、文件分片上传时每片的大小、文件的过期时间(单位为秒)，
-        BmobConfig config =new BmobConfig.Builder(this)
-        //设置appkey
-        .setApplicationId("Your Application ID")
-        //请求超时时间（单位为秒）：默认15s
-        .setConnectTimeout(30)
-        //文件分片上传时每片的大小（单位字节），默认512*1024
-        .setUploadBlockSize(1024*1024)
-        //文件的过期时间(单位为秒)：默认1800s
-        .setFileExpiration(2500)
-        .build();
+        BmobConfig config = new BmobConfig.Builder(this)
+                //设置appkey
+                .setApplicationId("Your Application ID")
+                //请求超时时间（单位为秒）：默认15s
+                .setConnectTimeout(30)
+                //文件分片上传时每片的大小（单位字节），默认512*1024
+                .setUploadBlockSize(1024 * 1024)
+                //文件的过期时间(单位为秒)：默认1800s
+                .setFileExpiration(2500)
+                .build();
         Bmob.initialize(config);
         //通知
         noti();
         //权限
         per();
-        //增
-        add();
-        //删
-        del();
-        //改
-        update();
-        //查
-        query();
 
     }
 
@@ -83,10 +91,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void done(String objectId, BmobException e) {
-                if(e==null){
-                    Toast.makeText(MainActivity.this, "创建数据成功：" + objectId, Toast.LENGTH_SHORT).show();
-                }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                if (e == null) {
+                    Toast.makeText(MainActivity.this, "创建数据成功：" + objectId, Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
         });
@@ -97,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent pi = PendingIntent.getActivity(this, 0,
                 new Intent(MainActivity.this, MainActivity.class), 0);
-        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat
+                .Builder(this)
                 .setTicker("更新啦")
                 .setContentTitle("标题")
                 .setContentText("内容")
@@ -120,13 +130,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onGranted() {
                         //当权限被授予时调用
-                        Toast.makeText(MainActivity.this, "Storage Permission granted",Toast.LENGTH_LONG).show();
+                        add();
+                        Toast.makeText(MainActivity.this, "Storage Permission granted", Toast
+                                .LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onDenied() {
                         //用户拒绝该权限时调用
-                        Toast.makeText(MainActivity.this, "Storage Permission denied",Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Storage Permission denied", Toast
+                                .LENGTH_LONG).show();
                     }
 
                     @Override
@@ -137,5 +150,28 @@ public class MainActivity extends AppCompatActivity {
                 })
                 //请求权限
                 .request();
+    }
+
+    @OnClick({R.id.add_btn, R.id.del_btn, R.id.update_btn, R.id.qurey_btn})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.add_btn:
+                per();
+                break;
+            case R.id.del_btn:
+                del();
+                break;
+            case R.id.update_btn:
+                update();
+                break;
+            case R.id.qurey_btn:
+                query();
+                break;
+        }
+    }
+
+    @OnClick(R.id.next_act)
+    public void nextBtn() {
+
     }
 }
