@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.zhimadai.cctvmall.bmobtest.entity.GameScore;
 import com.zhimadai.cctvmall.bmobtest.permission.PermissionListener;
 import com.zhimadai.cctvmall.bmobtest.permission.PermissionManager;
+import com.zhimadai.cctvmall.bmobtest.ui.Main2Activity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -172,6 +173,6 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.next_act)
     public void nextBtn() {
-
+        startActivity(new Intent(MainActivity.this, Main2Activity.class));
     }
 }
