@@ -6,7 +6,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.zhimadai.cctvmall.bmobtest.MainActivity;
 import com.zhimadai.cctvmall.bmobtest.R;
 import com.zhimadai.cctvmall.bmobtest.entity.Person;
 
